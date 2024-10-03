@@ -328,7 +328,7 @@ namespace App\Livewire;
 
 use Filament\Forms;
 use Filament\Notifications\Notification;
-use Jeffgreco13\FilamentBreezy\PersonalInfo;
+use Jeffgreco13\FilamentBreezy\Livewire\PersonalInfo;
 
 class CustomPersonalInfo extends PersonalInfo
 {
