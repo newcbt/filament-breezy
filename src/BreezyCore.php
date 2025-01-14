@@ -249,7 +249,7 @@ class BreezyCore implements Plugin
         return $this->{$key}['navigationGroup'] ?? null;
     }
 
-    public function enableTwoFactorAuthentication(bool $condition = true, bool $force = false, string|Closure|array|null $action = TwoFactorPage::class)
+    public function enableTwoFactorAuthentication(bool $condition = true, bool|Closure $force = false, string|Closure|array|null $action = TwoFactorPage::class)
     {
         $this->twoFactorAuthentication = $condition;
         $this->forceTwoFactorAuthentication = $force;
@@ -260,7 +260,7 @@ class BreezyCore implements Plugin
 
     public function getForceTwoFactorAuthentication(): bool
     {
-        return $this->forceTwoFactorAuthentication;
+        return $this->evaluate($this->forceTwoFactorAuthentication);
     }
 
     public function getTwoFactorRouteAction(): string|Closure|array|null
@@ -319,11 +319,13 @@ class BreezyCore implements Plugin
 
     public function shouldForceTwoFactor(): bool
     {
+        $forceTwoFactor = $this->getForceTwoFactorAuthentication();
+        
         if ($this->getCurrentPanel()->isEmailVerificationRequired()) {
-            return $this->forceTwoFactorAuthentication && ! $this->auth()->user()?->hasConfirmedTwoFactor() && $this->auth()->user()?->hasVerifiedEmail();
+            return $forceTwoFactor && ! $this->auth()->user()?->hasConfirmedTwoFactor() && $this->auth()->user()?->hasVerifiedEmail();
         }
 
-        return $this->forceTwoFactorAuthentication && ! $this->auth()->user()?->hasConfirmedTwoFactor();
+        return $forceTwoFactor && ! $this->auth()->user()?->hasConfirmedTwoFactor();
     }
 
     public function enableSanctumTokens(bool $condition = true, ?array $permissions = null)
