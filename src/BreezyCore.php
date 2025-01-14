@@ -17,7 +17,6 @@ use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
 use Illuminate\Cache\Repository;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Arr;
 use Illuminate\Validation\Rules\Password;
 use Jeffgreco13\FilamentBreezy\Livewire\PersonalInfo;
 use Jeffgreco13\FilamentBreezy\Livewire\SanctumTokens;
@@ -264,7 +263,6 @@ class BreezyCore implements Plugin
     {
         return $this->{$key}['navigationGroup'] ?? null;
     }
-
 
     public function enableTwoFactorAuthentication(bool $condition = true, bool|Closure $force = false, string|Closure|array|null $action = TwoFactorPage::class)
     {
