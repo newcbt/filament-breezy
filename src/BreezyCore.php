@@ -189,19 +189,23 @@ class BreezyCore implements Plugin
         ]);
     }
 
-    public function withoutMyProfileComponents(array $components)
+    public function withoutMyProfileComponents(array|Closure $components)
     {
-        $this->ignoredMyProfileComponents = $components;
+        $this->ignoredMyProfileComponents = is_array($components) ? $components : $this->evaluate($components);
 
         return $this;
     }
 
     public function myProfileComponents(array $components)
     {
+        $ignoredComponents = is_array($this->ignoredMyProfileComponents) 
+            ? $this->ignoredMyProfileComponents 
+            : [];
+
         $this->registeredMyProfileComponents = Arr::except([
             ...$components,
             ...$this->registeredMyProfileComponents,
-        ], $this->ignoredMyProfileComponents);
+        ], $ignoredComponents);
 
         return $this;
     }
