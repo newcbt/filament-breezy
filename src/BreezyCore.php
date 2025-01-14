@@ -191,13 +191,14 @@ class BreezyCore implements Plugin
 
     public function withoutMyProfileComponents(array|Closure $components)
     {
-        $this->ignoredMyProfileComponents = $components;
+        $this->ignoredMyProfileComponents = is_array($components) ? $components : $this->evaluate($components);
 
         return $this;
     }
 
     public function myProfileComponents(array $components)
     {
+
         $merged = [
             ...$components,
             ...$this->registeredMyProfileComponents,
@@ -216,8 +217,8 @@ class BreezyCore implements Plugin
 
     public function getRegisteredMyProfileComponents(): array
     {
-        $ignoredComponents = is_array($this->ignoredMyProfileComponents) 
-            ? $this->ignoredMyProfileComponents 
+        $ignoredComponents = is_array($this->ignoredMyProfileComponents)
+            ? $this->ignoredMyProfileComponents
             : $this->evaluate($this->ignoredMyProfileComponents);
 
         $components = collect($this->registeredMyProfileComponents)
@@ -335,7 +336,7 @@ class BreezyCore implements Plugin
     public function shouldForceTwoFactor(): bool
     {
         $forceTwoFactor = $this->getForceTwoFactorAuthentication();
-        
+
         if ($this->getCurrentPanel()->isEmailVerificationRequired()) {
             return $forceTwoFactor && ! $this->auth()->user()?->hasConfirmedTwoFactor() && $this->auth()->user()?->hasVerifiedEmail();
         }
