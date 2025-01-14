@@ -91,6 +91,7 @@ Enable the My Profile page with configuration options.
 BreezyCore::make()
     ->myProfile(
         shouldRegisterUserMenu: true, // Sets the 'account' link in the panel User Menu (default = true)
+        userMenuLabel: 'My Profile', // Customizes the 'account' link label in the panel User Menu (default = null)
         shouldRegisterNavigation: false, // Adds a main navigation item for the My Profile page (default = false)
         navigationGroup: 'Settings', // Sets the navigation group for the My Profile page (default = null)
         hasAvatars: false, // Enables the avatar upload form component (default = false)
@@ -328,7 +329,7 @@ namespace App\Livewire;
 
 use Filament\Forms;
 use Filament\Notifications\Notification;
-use Jeffgreco13\FilamentBreezy\PersonalInfo;
+use Jeffgreco13\FilamentBreezy\Livewire\PersonalInfo;
 
 class CustomPersonalInfo extends PersonalInfo
 {
