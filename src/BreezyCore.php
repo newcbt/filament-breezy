@@ -125,12 +125,12 @@ class BreezyCore implements Plugin
                     $tenantId = request()->route()->parameter('tenant');
                     if ($tenantId && $tenant = app($panel->getTenantModel())::where($panel->getTenantSlugAttribute() ?? 'id', $tenantId)->first()) {
                         $panel->userMenuItems([
-                            'account' => MenuItem::make()->url($this->getMyProfilePageClass()::getUrl(panel: $panel->getId(), tenant: $tenant)),
+                            'account' => MenuItem::make()->url($this->getMyProfilePageClass()::getUrl(panel: $panel->getId(), tenant: $tenant))->label($this->myProfile['userMenuLabel']),
                         ]);
                     }
                 } else {
                     $panel->userMenuItems([
-                        'account' => MenuItem::make()->url($this->getMyProfilePageClass()::getUrl()),
+                        'account' => MenuItem::make()->url($this->getMyProfilePageClass()::getUrl())->label($this->myProfile['userMenuLabel']),
                     ]);
                 }
             }
@@ -147,7 +147,7 @@ class BreezyCore implements Plugin
         return Filament::getCurrentPanel();
     }
 
-    public function myProfile(bool $condition = true, bool $shouldRegisterUserMenu = true, bool $shouldRegisterNavigation = false, bool $hasAvatars = false, string $slug = 'my-profile', ?string $navigationGroup = null)
+    public function myProfile(bool $condition = true, bool $shouldRegisterUserMenu = true, bool $shouldRegisterNavigation = false, bool $hasAvatars = false, string $slug = 'my-profile', ?string $navigationGroup = null, ?string $userMenuLabel = null)
     {
         $this->myProfile = get_defined_vars();
 
