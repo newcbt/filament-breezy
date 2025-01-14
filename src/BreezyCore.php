@@ -189,7 +189,7 @@ class BreezyCore implements Plugin
         ]);
     }
 
-    public function withoutMyProfileComponents(array $components)
+    public function withoutMyProfileComponents(array|Closure $components)
     {
         $this->ignoredMyProfileComponents = $components;
 
@@ -198,21 +198,36 @@ class BreezyCore implements Plugin
 
     public function myProfileComponents(array $components)
     {
-        $this->registeredMyProfileComponents = Arr::except([
+        $merged = [
             ...$components,
             ...$this->registeredMyProfileComponents,
-        ], $this->ignoredMyProfileComponents);
+        ];
+
+        // Ensure we have string keys
+        $merged = array_combine(
+            array_map('strval', array_keys($merged)),
+            array_values($merged)
+        );
+
+        $this->registeredMyProfileComponents = $merged;
 
         return $this;
     }
 
     public function getRegisteredMyProfileComponents(): array
     {
-        $components = collect($this->registeredMyProfileComponents)->filter(
-            fn (string $component) => $component::canView()
-        )->sortBy(
-            fn (string $component) => $component::getSort()
-        );
+        $ignoredComponents = is_array($this->ignoredMyProfileComponents) 
+            ? $this->ignoredMyProfileComponents 
+            : $this->evaluate($this->ignoredMyProfileComponents);
+
+        $components = collect($this->registeredMyProfileComponents)
+            ->filter(
+                fn (string $component) => $component::canView()
+            )
+            ->except($ignoredComponents)
+            ->sortBy(
+                fn (string $component) => $component::getSort()
+            );
 
         if ($this->shouldForceTwoFactor()) {
             $components = $components->only(['two_factor_authentication']);
