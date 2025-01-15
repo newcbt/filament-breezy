@@ -63,7 +63,7 @@ class TwoFactorPage extends SimplePage
                 ->extraInputAttributes(['class' => 'text-center', 'autocomplete' => $this->usingRecoveryCode ? 'off' : 'one-time-code'])
                 ->autofocus()
                 ->suffixAction(
-                    FormAction::make('cancel')
+                    Forms\Components\Actions\Action::make('cancel')
                         ->ToolTip(__('filament-breezy::default.cancel'))
                         ->icon('heroicon-o-x-circle')
                         ->action(function () {
